@@ -74,7 +74,7 @@ body{
 }
 
 .down {
-    animation: scrollDown 25s linear infinite;
+    animation: scrollDown 20s linear infinite;
 }
 
 @keyframes scrollUp {
@@ -234,37 +234,65 @@ button:hover{
 
 let analyser;
 let dataArray;
-let apagou=false;
+let apagou = false;
 
 async function startMic(){
 
-    const audio=document.getElementById("birthday-audio");
+    const audio = document.getElementById("birthday-audio");
+
+    // precisa de interação do usuário (ok no botão)
     audio.play().catch(()=>{});
 
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    try{
 
-    const audioContext=new AudioContext();
-    const source=audioContext.createMediaStreamSource(stream);
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true
+        });
 
-    analyser=audioContext.createAnalyser();
-    analyser.fftSize=256;
+        const audioContext =
+            new (window.AudioContext || window.webkitAudioContext)();
 
-    source.connect(analyser);
+        await audioContext.resume();
 
-    dataArray=new Uint8Array(analyser.frequencyBinCount);
+        const source =
+            audioContext.createMediaStreamSource(stream);
 
-    detectBlow();
+        analyser =
+            audioContext.createAnalyser();
+
+        analyser.fftSize = 256;
+
+        source.connect(analyser);
+
+        const bufferLength =
+            analyser.frequencyBinCount;
+
+        dataArray =
+            new Uint8Array(bufferLength);
+
+        detectBlow();
+
+    }catch(e){
+
+        alert("Não foi possível acessar o microfone.");
+
+    }
 }
 
 function detectBlow(){
 
     analyser.getByteFrequencyData(dataArray);
 
-    const volume=dataArray.reduce((a,b)=>a+b)/dataArray.length;
+    const volume =
+        dataArray.reduce((a,b)=>a+b)/dataArray.length;
 
-    if(volume>100 && !apagou){
-        apagou=true;
+    // 🔥 mais sensível no mobile
+    if(volume > 80 && !apagou){
+
+        apagou = true;
+
         apagarVela();
+
         return;
     }
 
@@ -272,28 +300,43 @@ function detectBlow(){
 }
 
 function apagarVela(){
-    document.getElementById("flame").classList.add("hidden");
+
+    document
+        .getElementById("flame")
+        .classList
+        .add("hidden");
+
     soltarConfete();
 }
 
 function soltarConfete(){
 
-    const centro=window.innerWidth/2;
+    for(let i = 0; i < 350; i++){
 
-    for(let i=0;i<350;i++){
+        const c = document.createElement("div");
+        c.className = "confetti";
 
-        const c=document.createElement("div");
-        c.className="confetti";
+        // nasce no topo da tela (fix certo)
+        c.style.top = (-20 - Math.random()*100) + "px";
 
-        c.style.left=(centro+(Math.random()-0.5)*260)+"px";
-        c.style.width=(6+Math.random()*10)+"px";
-        c.style.height=(10+Math.random()*18)+"px";
-        c.style.background=`hsl(${Math.random()*360},100%,60%)`;
-        c.style.animationDuration=(3+Math.random()*3)+"s";
+        // espalha na largura inteira
+        c.style.left = (Math.random() * window.innerWidth) + "px";
+
+        c.style.width = (6 + Math.random()*10) + "px";
+        c.style.height = (10 + Math.random()*18) + "px";
+
+        c.style.background =
+            `hsl(${Math.random()*360},100%,60%)`;
+
+        c.style.borderRadius =
+            ["50%","0%","20%"][Math.floor(Math.random()*3)];
+
+        c.style.animationDuration =
+            (3 + Math.random()*3) + "s";
 
         document.body.appendChild(c);
 
-        setTimeout(()=>c.remove(),7000);
+        setTimeout(()=> c.remove(), 7000);
     }
 }
 
