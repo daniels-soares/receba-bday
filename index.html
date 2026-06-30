@@ -34,6 +34,65 @@ body{
     100%{background-position:100% 50%;}
 }
 
+/* =========================
+   CARROSSEL LATERAL
+========================= */
+
+.side-carousel {
+    position: fixed;
+    top: 0;
+    width: 140px;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.side-carousel.left {
+    left: 0;
+}
+
+.side-carousel.right {
+    right: 0;
+}
+
+.track {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.track img {
+    width: 100%;
+    border-radius: 14px;
+    object-fit: cover;
+    box-shadow: 0 10px 20px rgba(0,0,0,.2);
+}
+
+.up {
+    animation: scrollUp 21s linear infinite;
+}
+
+.down {
+    animation: scrollDown 25s linear infinite;
+}
+
+@keyframes scrollUp {
+    from { transform: translateY(0); }
+    to { transform: translateY(-50%); }
+}
+
+@keyframes scrollDown {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+    .side-carousel {
+        display: none;
+    }
+}
+
 h1{
     color:white;
     text-shadow:2px 2px 8px rgba(0,0,0,.25);
@@ -53,150 +112,57 @@ h1{
     pointer-events:none;
 }
 
-/* CHAMA RESPONSIVA */
+/* CHAMA */
 .flame{
     position:absolute;
-
     width:13%;
     aspect-ratio:1/1.2;
-
     left:43%;
     top:12%;
-
     background:radial-gradient(circle,#fff 0%,#ffd54a 45%,orange 100%);
     border-radius:50% 50% 60% 60%;
-
-    box-shadow:
-        0 0 15px orange,
-        0 0 35px gold;
-
+    box-shadow:0 0 15px orange, 0 0 35px gold;
     animation:flicker .15s infinite;
 }
 
 @keyframes flicker{
-
-    0%{
-        transform:
-        scale(1)
-        rotate(-2deg);
-    }
-
-    50%{
-        transform:
-        scale(1.15)
-        rotate(2deg);
-    }
-
-    100%{
-        transform:
-        scale(.92)
-        rotate(-1deg);
-    }
-
+    0%{transform:scale(1) rotate(-2deg);}
+    50%{transform:scale(1.15) rotate(2deg);}
+    100%{transform:scale(.92) rotate(-1deg);}
 }
 
-.hidden{
-    display:none;
-}
-
-/* BOTÃO */
+.hidden{ display:none; }
 
 button{
-
     margin-top:35px;
-
     width:min(320px,90vw);
-
     padding:16px;
-
     font-size:18px;
-
     border:none;
-
     border-radius:50px;
-
     cursor:pointer;
-
     color:white;
-
     font-weight:bold;
-
     background:linear-gradient(45deg,#ff6bb5,#8b5cff);
-
     box-shadow:0 12px 25px rgba(0,0,0,.25);
-
     transition:.25s;
 }
 
 button:hover{
-
     transform:translateY(-3px) scale(1.05);
-
     box-shadow:0 18px 30px rgba(0,0,0,.3);
-
 }
 
-/* CONFETE */
-
 .confetti{
-
     position:fixed;
-
     top:-30px;
-
     opacity:.95;
-
     animation:fall linear forwards;
-
 }
 
 @keyframes fall{
-
-    0%{
-
-        transform:
-        translateY(-30px)
-        rotate(0deg)
-        translateX(0);
-
-    }
-
-    25%{
-
-        transform:
-        translateY(25vh)
-        rotate(180deg)
-        translateX(-40px);
-
-    }
-
-    50%{
-
-        transform:
-        translateY(50vh)
-        rotate(360deg)
-        translateX(40px);
-
-    }
-
-    75%{
-
-        transform:
-        translateY(75vh)
-        rotate(540deg)
-        translateX(-20px);
-
-    }
-
-    100%{
-
-        transform:
-        translateY(110vh)
-        rotate(720deg)
-        translateX(20px);
-
-    }
-
+    0%{transform:translateY(-30px) rotate(0deg);}
+    100%{transform:translateY(110vh) rotate(720deg);}
 }
 
 </style>
@@ -204,25 +170,65 @@ button:hover{
 
 <body>
 
+<!-- CARROSSEL ESQUERDA -->
+<div class="side-carousel left">
+    <div class="track up">
+
+        <img src="src/Receba/receba1.jpeg">
+        <img src="src/Receba/receba2.jpeg">
+        <img src="src/Receba/receba3.jpeg">
+        <img src="src/Receba/receba4.jpeg">
+        <img src="src/Receba/receba5.jpeg">
+        <img src="src/Receba/receba6.jpeg">
+        <img src="src/Receba/receba7.jpeg">
+        <img src="src/Receba/receba8.jpeg">
+        <img src="src/Receba/receba9.jpeg">
+        <img src="src/Receba/receba10.jpeg">
+
+        <!-- repetição -->
+        <img src="src/Receba/receba1.jpeg">
+        <img src="src/Receba/receba2.jpeg">
+        <img src="src/Receba/receba3.jpeg">
+        <img src="src/Receba/receba4.jpeg">
+        <img src="src/Receba/receba5.jpeg">
+
+    </div>
+</div>
+
+<!-- CARROSSEL DIREITA -->
+<div class="side-carousel right">
+    <div class="track down">
+
+        <img src="src/Receba/receba11.jpeg">
+        <img src="src/Receba/receba12.jpeg">
+        <img src="src/Receba/receba13.jpeg">
+        <img src="src/Receba/receba14.jpeg">
+        <img src="src/Receba/receba15.jpeg">
+        <img src="src/Receba/receba16.jpeg">
+        <img src="src/Receba/receba17.jpeg">
+        <img src="src/Receba/receba18.jpeg">
+        <img src="src/Receba/receba19.jpeg">
+        <img src="src/Receba/receba20.jpeg">
+
+        <!-- repetição -->
+        <img src="src/Receba/receba11.jpeg">
+        <img src="src/Receba/receba12.jpeg">
+        <img src="src/Receba/receba13.jpeg">
+        <img src="src/Receba/receba14.jpeg">
+
+    </div>
+</div>
+
 <h1>🎉 Parabéns, gatinha! Assopre a velinha 🎂</h1>
 
 <div id="cake-container">
-
-    <img src="src/cake_niver.png" id="cake-img" alt="Bolo">
-
+    <img src="src/cake_niver.png" id="cake-img">
     <div class="flame" id="flame"></div>
-
 </div>
 
-<button onclick="startMic()">
-    🎤 Ativar Microfone
-</button>
+<button onclick="startMic()">🎤 Ativar Microfone</button>
 
-<audio
-id="birthday-audio"
-src="src/Parabens.mp3"
-loop>
-</audio>
+<audio id="birthday-audio" src="src/Parabens.mp3" loop></audio>
 
 <script>
 
@@ -233,129 +239,62 @@ let apagou=false;
 async function startMic(){
 
     const audio=document.getElementById("birthday-audio");
-
     audio.play().catch(()=>{});
 
-    try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
 
-        const stream=
-        await navigator.mediaDevices.getUserMedia({
-            audio:true
-        });
+    const audioContext=new AudioContext();
+    const source=audioContext.createMediaStreamSource(stream);
 
-        const audioContext=
-        new AudioContext();
+    analyser=audioContext.createAnalyser();
+    analyser.fftSize=256;
 
-        const source=
-        audioContext.createMediaStreamSource(stream);
+    source.connect(analyser);
 
-        analyser=
-        audioContext.createAnalyser();
+    dataArray=new Uint8Array(analyser.frequencyBinCount);
 
-        analyser.fftSize=256;
-
-        source.connect(analyser);
-
-        const bufferLength=
-        analyser.frequencyBinCount;
-
-        dataArray=
-        new Uint8Array(bufferLength);
-
-        detectBlow();
-
-    }catch(e){
-
-        alert("Não foi possível acessar o microfone.");
-
-    }
-
+    detectBlow();
 }
 
 function detectBlow(){
 
     analyser.getByteFrequencyData(dataArray);
 
-    const volume=
-    dataArray.reduce((a,b)=>a+b)/dataArray.length;
+    const volume=dataArray.reduce((a,b)=>a+b)/dataArray.length;
 
     if(volume>100 && !apagou){
-
         apagou=true;
-
         apagarVela();
-
         return;
-
     }
 
     requestAnimationFrame(detectBlow);
-
 }
 
 function apagarVela(){
-
-    document
-    .getElementById("flame")
-    .classList
-    .add("hidden");
-
+    document.getElementById("flame").classList.add("hidden");
     soltarConfete();
-
 }
 
 function soltarConfete(){
 
-    const centro=
-    window.innerWidth/2;
-
-    const formatos=[
-        "50%",
-        "0%",
-        "20%"
-    ];
+    const centro=window.innerWidth/2;
 
     for(let i=0;i<350;i++){
 
-        const c=
-        document.createElement("div");
-
+        const c=document.createElement("div");
         c.className="confetti";
 
-        c.style.left=
-        (centro+(Math.random()-0.5)*260)+"px";
-
-        c.style.width=
-        (6+Math.random()*10)+"px";
-
-        c.style.height=
-        (10+Math.random()*18)+"px";
-
-        c.style.background=
-        `hsl(${Math.random()*360},100%,60%)`;
-
-        c.style.borderRadius=
-        formatos[Math.floor(Math.random()*formatos.length)];
-
-        c.style.animationDuration=
-        (3+Math.random()*3)+"s";
-
-        c.style.animationDelay=
-        (Math.random()*1.5)+"s";
-
-        c.style.transform=
-        `rotate(${Math.random()*360}deg)`;
+        c.style.left=(centro+(Math.random()-0.5)*260)+"px";
+        c.style.width=(6+Math.random()*10)+"px";
+        c.style.height=(10+Math.random()*18)+"px";
+        c.style.background=`hsl(${Math.random()*360},100%,60%)`;
+        c.style.animationDuration=(3+Math.random()*3)+"s";
 
         document.body.appendChild(c);
 
-        setTimeout(()=>{
-
-            c.remove();
-
-        },7000);
-
+        setTimeout(()=>c.remove(),7000);
     }
-
 }
 
 </script>
