@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🎉 Feliz Aniversário!</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#9f63ff,#ff9ed6,#ffffff);
+    background-size:400% 400%;
+    animation:bgMove 10s ease infinite alternate;
+    overflow:hidden;
+    padding:20px;
+    text-align:center;
+}
+
+@keyframes bgMove{
+    0%{background-position:0% 50%;}
+    100%{background-position:100% 50%;}
+}
+
+h1{
+    color:white;
+    text-shadow:2px 2px 8px rgba(0,0,0,.25);
+    font-size:clamp(1.6rem,4vw,3rem);
+    margin-bottom:25px;
+}
+
+#cake-container{
+    position:relative;
+    width:min(90vw,420px);
+}
+
+#cake-img{
+    width:100%;
+    display:block;
+    user-select:none;
+    pointer-events:none;
+}
+
+/* CHAMA RESPONSIVA */
+.flame{
+    position:absolute;
+
+    width:13%;
+    aspect-ratio:1/1.2;
+
+    left:43%;
+    top:12%;
+
+    background:radial-gradient(circle,#fff 0%,#ffd54a 45%,orange 100%);
+    border-radius:50% 50% 60% 60%;
+
+    box-shadow:
+        0 0 15px orange,
+        0 0 35px gold;
+
+    animation:flicker .15s infinite;
+}
+
+@keyframes flicker{
+
+    0%{
+        transform:
+        scale(1)
+        rotate(-2deg);
+    }
+
+    50%{
+        transform:
+        scale(1.15)
+        rotate(2deg);
+    }
+
+    100%{
+        transform:
+        scale(.92)
+        rotate(-1deg);
+    }
+
+}
+
+.hidden{
+    display:none;
+}
+
+/* BOTÃO */
+
+button{
+
+    margin-top:35px;
+
+    width:min(320px,90vw);
+
+    padding:16px;
+
+    font-size:18px;
+
+    border:none;
+
+    border-radius:50px;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-weight:bold;
+
+    background:linear-gradient(45deg,#ff6bb5,#8b5cff);
+
+    box-shadow:0 12px 25px rgba(0,0,0,.25);
+
+    transition:.25s;
+}
+
+button:hover{
+
+    transform:translateY(-3px) scale(1.05);
+
+    box-shadow:0 18px 30px rgba(0,0,0,.3);
+
+}
+
+/* CONFETE */
+
+.confetti{
+
+    position:fixed;
+
+    top:-30px;
+
+    opacity:.95;
+
+    animation:fall linear forwards;
+
+}
+
+@keyframes fall{
+
+    0%{
+
+        transform:
+        translateY(-30px)
+        rotate(0deg)
+        translateX(0);
+
+    }
+
+    25%{
+
+        transform:
+        translateY(25vh)
+        rotate(180deg)
+        translateX(-40px);
+
+    }
+
+    50%{
+
+        transform:
+        translateY(50vh)
+        rotate(360deg)
+        translateX(40px);
+
+    }
+
+    75%{
+
+        transform:
+        translateY(75vh)
+        rotate(540deg)
+        translateX(-20px);
+
+    }
+
+    100%{
+
+        transform:
+        translateY(110vh)
+        rotate(720deg)
+        translateX(20px);
+
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🎉 Parabéns, gatinha! Assopre a velinha 🎂</h1>
+
+<div id="cake-container">
+
+    <img src="src/cake_niver.png" id="cake-img" alt="Bolo">
+
+    <div class="flame" id="flame"></div>
+
+</div>
+
+<button onclick="startMic()">
+    🎤 Ativar Microfone
+</button>
+
+<audio
+id="birthday-audio"
+src="src/Parabens.mp3"
+loop>
+</audio>
+
+<script>
+
+let analyser;
+let dataArray;
+let apagou=false;
+
+async function startMic(){
+
+    const audio=document.getElementById("birthday-audio");
+
+    audio.play().catch(()=>{});
+
+    try{
+
+        const stream=
+        await navigator.mediaDevices.getUserMedia({
+            audio:true
+        });
+
+        const audioContext=
+        new AudioContext();
+
+        const source=
+        audioContext.createMediaStreamSource(stream);
+
+        analyser=
+        audioContext.createAnalyser();
+
+        analyser.fftSize=256;
+
+        source.connect(analyser);
+
+        const bufferLength=
+        analyser.frequencyBinCount;
+
+        dataArray=
+        new Uint8Array(bufferLength);
+
+        detectBlow();
+
+    }catch(e){
+
+        alert("Não foi possível acessar o microfone.");
+
+    }
+
+}
+
+function detectBlow(){
+
+    analyser.getByteFrequencyData(dataArray);
+
+    const volume=
+    dataArray.reduce((a,b)=>a+b)/dataArray.length;
+
+    if(volume>100 && !apagou){
+
+        apagou=true;
+
+        apagarVela();
+
+        return;
+
+    }
+
+    requestAnimationFrame(detectBlow);
+
+}
+
+function apagarVela(){
+
+    document
+    .getElementById("flame")
+    .classList
+    .add("hidden");
+
+    soltarConfete();
+
+}
+
+function soltarConfete(){
+
+    const centro=
+    window.innerWidth/2;
+
+    const formatos=[
+        "50%",
+        "0%",
+        "20%"
+    ];
+
+    for(let i=0;i<350;i++){
+
+        const c=
+        document.createElement("div");
+
+        c.className="confetti";
+
+        c.style.left=
+        (centro+(Math.random()-0.5)*260)+"px";
+
+        c.style.width=
+        (6+Math.random()*10)+"px";
+
+        c.style.height=
+        (10+Math.random()*18)+"px";
+
+        c.style.background=
+        `hsl(${Math.random()*360},100%,60%)`;
+
+        c.style.borderRadius=
+        formatos[Math.floor(Math.random()*formatos.length)];
+
+        c.style.animationDuration=
+        (3+Math.random()*3)+"s";
+
+        c.style.animationDelay=
+        (Math.random()*1.5)+"s";
+
+        c.style.transform=
+        `rotate(${Math.random()*360}deg)`;
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>{
+
+            c.remove();
+
+        },7000);
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
